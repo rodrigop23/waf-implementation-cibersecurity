@@ -1,0 +1,25 @@
+# Ignore node_modules directory
+node_modules
+
+# Ignore logs
+logs
+*.log
+npm-debug.log*
+
+# Ignore build directories
+dist
+build
+
+# Ignore environment variables
+.env
+
+# Ignore Dockerfile and docker-compose files
+Dockerfile
+docker-compose.yml
+
+# Ignore any .DS_Store files (macOS)
+.DS_Store
+
+# Ignore any temporary files
+*.tmp
+*.swp
