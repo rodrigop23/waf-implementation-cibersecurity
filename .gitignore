@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+postgresql_data
+postgresql
+
+.vscode
+.idea
+.env
