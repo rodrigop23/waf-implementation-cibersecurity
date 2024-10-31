@@ -1,3 +1,6 @@
+"use client";
+
+import { register } from "@/actions/user/action";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +12,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
+  const router = useRouter();
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    await register(data);
+
+    router.push("/");
+  }
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -20,7 +36,7 @@ export default function RegisterForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
+        <form className="grid gap-4" onSubmit={onSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="first-name">Nombre</Label>
@@ -42,7 +58,7 @@ export default function RegisterForm() {
           <Button type="submit" className="w-full">
             Crear una cuenta
           </Button>
-        </div>
+        </form>
         <div className="mt-4 text-center text-sm">
           ¿Ya tienes una cuenta?{" "}
           <Link href="/sign-in" className="underline">
