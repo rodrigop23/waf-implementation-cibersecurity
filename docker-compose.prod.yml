@@ -1,0 +1,50 @@
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ulima2024
+      POSTGRES_PASSWORD: root
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  next:
+    container_name: next
+    image: rodrigo/next
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://ulima2024:root@db:5432/postgres?schema=public
+      PG_USER: ulima2024
+      PG_HOST: localhost
+      PG_DATABASE: postgres
+      PG_PASSWORD: root
+      PG_PORT: 5432
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+
+  openappsec:
+    image: ghcr.io/openappsec/agent:latest
+    ports:
+      - "80:80" # Puerto HTTP expuesto por el WAF
+      - "443:443" # Puerto HTTPS expuesto por el WAF
+    networks:
+      - app_network
+    depends_on:
+      - next
+
+volumes:
+  postgresql:
+  postgresql_data:
+
+networks:
+  app_network:
+    driver: bridge
