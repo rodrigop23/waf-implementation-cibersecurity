@@ -36,6 +36,8 @@ services:
     ports:
       - "80:80" # Puerto HTTP expuesto por el WAF
       - "443:443" # Puerto HTTPS expuesto por el WAF
+    volumes:
+      - ./waf-config:/etc/open-appsec
     networks:
       - app_network
     depends_on:

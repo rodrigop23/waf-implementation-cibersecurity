@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Global
 model User {
   id       Int       @id @default(autoincrement())
   email    String    @unique @map("email")
@@ -30,10 +31,21 @@ model Session {
   expiresAt DateTime
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
+// SQL Injection Table for Testing
 model Test {
   id Int @id @default(autoincrement())
 
   @@map("tests")
+}
+
+// XSS
+model Comment {
+  id      Int    @id @default(autoincrement())
+  content String
+
+  @@map("comments")
 }
