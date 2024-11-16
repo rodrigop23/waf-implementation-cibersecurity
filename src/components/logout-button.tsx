@@ -18,7 +18,7 @@ export default function LogoutButton() {
 
   return (
     <form onSubmit={onSubmit}>
-      <Button type="submit">
+      <Button type="submit" className="w-full">
         <LogOut />
         Cerrar sesión
       </Button>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { setSession } from "@/lib/session";
+import { getCurrentUser, setSession } from "@/lib/session";
 import { invalidateSession, validateRequest } from "@/lib/auth";
 
 export async function loginAction(formData: {
@@ -68,4 +68,10 @@ export async function logoutAction() {
   await invalidateSession(session.id);
 
   return true;
+}
+
+export async function getUserAction() {
+  const user = await getCurrentUser();
+
+  return user;
 }
