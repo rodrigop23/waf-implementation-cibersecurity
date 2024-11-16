@@ -1,47 +1,60 @@
 services:
-  db:
-    container_name: db
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: ulima2024
-      POSTGRES_PASSWORD: root
-    volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
-    networks:
-      - app_network
-
   next:
     container_name: next
     image: rodrigo/next
     build: .
-    depends_on:
-      - db
     environment:
-      DATABASE_URL: postgresql://ulima2024:root@db:5432/postgres?schema=public
-      PG_USER: ulima2024
-      PG_HOST: localhost
-      PG_DATABASE: postgres
-      PG_PASSWORD: root
+      DATABASE_URL: postgresql://ciberseguridad_owner:7IXBfzmv6xcE@ep-divine-tree-a5za3o0j-pooler.us-east-2.aws.neon.tech/ciberseguridad?sslmode=require
+      PG_USER: ciberseguridad_owner
+      PG_HOST: ep-divine-tree-a5za3o0j-pooler.us-east-2.aws.neon.tech
+      PG_DATABASE: ciberseguridad
+      PG_PASSWORD: 7IXBfzmv6xcE
       PG_PORT: 5432
     ports:
       - "3000:3000"
     networks:
       - app_network
 
-  openappsec:
+  open-appsec-agent:
     image: ghcr.io/openappsec/agent:latest
-    ports:
-      - "80:80" # Puerto HTTP expuesto por el WAF
-      - "443:443" # Puerto HTTPS expuesto por el WAF
+    container_name: open-appsec-agent
+    ipc: host
+    platform: linux/amd64
+    environment:
+      registered_server: "Kong Server"
+      user_email: "20191544@aloe.ulima.edu.pe" # Reemplaza con tu email
+      autoPolicyLoad: "true" # Cambia a "true" si deseas aplicar automáticamente las políticas
+      https_proxy: "" # Configura si necesitas un proxy
+      AGENT_TOKEN: "cp-e455f257-940f-48e7-9704-fee2dee27c8f7737c40a-782f-4030-905f-776e1f4a15e7" # Opcional, añade tu token aquí
     volumes:
-      - ./waf-config:/etc/open-appsec
+      - ./config:/etc/cp/conf # Configuración persistente
+      - ./data:/etc/cp/data # Datos persistentes
+      - ./logs:/var/log/nano_agent # Logs persistentes
+      - ./local-policy:/ext/appsec # Archivo local_policy.yaml
+    restart: unless-stopped
     networks:
       - app_network
+
+  kong:
+    image: ghcr.io/openappsec/kong-attachment:latest
+    container_name: kong
+    ipc: host
+    platform: linux/amd64
+    ports:
+      - "8000:8000" # Puerto público
+      - "8443:8443" # Puerto HTTPS
+      - "8001:8001" # Admin API
+    environment:
+      KONG_DATABASE: "off" # Configuración en memoria
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/kong.yaml
+    volumes:
+      - ./kong.yaml:/usr/local/kong/kong.yaml
     depends_on:
+      - open-appsec-agent
       - next
+    restart: unless-stopped
+    networks:
+      - app_network
 
 volumes:
   postgresql:
