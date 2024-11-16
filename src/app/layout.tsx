@@ -28,7 +28,7 @@ export default function RootLayout({
         <SidebarProvider>
           <AppSidebar />
           <Suspense fallback={null}>
-            <SidebarTrigger />
+            <SidebarTrigger className="ml-2 mt-2" />
             {children}
           </Suspense>
           <Toaster closeButton />

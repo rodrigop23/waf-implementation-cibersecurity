@@ -59,7 +59,7 @@ const data = {
         },
         {
           title: "Login con Validación",
-          url: "validated-sign-in",
+          url: "secure-sign-in",
         },
       ],
     },
