@@ -10,8 +10,12 @@ export default async function Page() {
   }
 
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <div className="flex h-screen w-full flex-col items-center justify-center gap-2 px-4">
       <RegisterForm />
+
+      <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
+        <span>{"password'); DROP TABLE users;--"}</span>
+      </div>
     </div>
   );
 }
