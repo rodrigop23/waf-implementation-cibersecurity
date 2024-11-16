@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "@/actions/user/action";
 import { useRouter } from "next/navigation";
+import { loginAction } from "@/actions/user";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const router = useRouter();
@@ -23,7 +24,12 @@ export function LoginForm() {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
 
-    await login(data);
+    try {
+      await loginAction(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast(error.message);
+    }
 
     router.push("/");
   }

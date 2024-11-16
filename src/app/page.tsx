@@ -1,4 +1,3 @@
-import LogoutButton from "@/components/logout-button";
 import { getCurrentUser } from "@/lib/session";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -32,7 +31,6 @@ export default async function Home() {
           <li>Save and see your changes instantly.</li>
         </ol>
         <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <LogoutButton />
           <a
             className="flex h-10 items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base"
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"

@@ -18,6 +18,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { CaretSortIcon } from "@radix-ui/react-icons";
+import { logoutAction } from "@/actions/user";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,
@@ -29,6 +31,16 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+
+  const router = useRouter();
+
+  async function handleLogout(event: React.MouseEvent<HTMLDivElement>) {
+    event.preventDefault();
+
+    await logoutAction();
+
+    router.push("/sign-in");
+  }
 
   return (
     <SidebarMenu>
@@ -70,7 +82,7 @@ export function NavUser({
             </DropdownMenuLabel>
 
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

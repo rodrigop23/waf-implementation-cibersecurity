@@ -1,34 +1,24 @@
-// import db from "../../../lib/pg";
+import db from "@/lib/pg";
 
 export async function POST(request: Request) {
-  const body = await request.json();
+  try {
+    const body = await request.json();
 
-  return Response.json({ body });
+    const { first_name, last_name, email, password } = body;
+
+    const result = await db.query(
+      `INSERT INTO users (name, lastname, email, password) VALUES ('${first_name}', '${last_name}', '${email}', '${password}') RETURNING *`,
+    );
+
+    const newUser = result[0];
+
+    if (!newUser) {
+      return Response.json({ ok: false, message: "Error al crear usuario" });
+    }
+
+    return Response.json({ ok: true, user: newUser });
+  } catch (error) {
+    console.log(error);
+    return Response.json({ ok: false, message: "Error en el servidor" });
+  }
 }
-
-export async function GET(request: Request) {
-  const body = await request.json();
-
-  return Response.json({ body });
-}
-
-// export async function login(data: { [k: string]: FormDataEntryValue }) {
-//   try {
-//     const result = await db.query(
-//       `SELECT * FROM users WHERE email = '${data.email.toString()}' AND password = '${data.password.toString()}'`,
-//     );
-
-//     const findUser = result[0];
-
-//     if (!findUser) {
-//       throw new Error("User not found");
-//     }
-
-//     await setSession(findUser.id);
-
-//     console.log(findUser);
-//   } catch (error: any) {
-//     console.log(error);
-//     throw new Error(error.message);
-//   }
-// }

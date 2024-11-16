@@ -1,6 +1,6 @@
 "use client";
 
-import { register } from "@/actions/user/action";
+import { registerAction } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -22,8 +23,12 @@ export default function RegisterForm() {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
 
-    await register(data);
-
+    try {
+      await registerAction(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast(error.message);
+    }
     router.push("/");
   }
 
