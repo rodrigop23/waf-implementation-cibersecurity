@@ -1,14 +1,13 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "lastname" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
 
-  - You are about to drop the `Session` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "Session" DROP CONSTRAINT "Session_userId_fkey";
-
--- DropTable
-DROP TABLE "Session";
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "sessions" (
@@ -20,12 +19,22 @@ CREATE TABLE "sessions" (
 );
 
 -- CreateTable
+CREATE TABLE "tests" (
+    "id" SERIAL NOT NULL,
+
+    CONSTRAINT "tests_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "comments" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
 
     CONSTRAINT "comments_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
